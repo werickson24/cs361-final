@@ -11,7 +11,7 @@ class Track
     @segments = segment_objects
   end
 
-  def get_track_json()
+  def get_json()
     j = '{'
     j += '"type": "Feature", '
     if @name != nil
@@ -84,14 +84,17 @@ class Waypoint
     @type = type
   end
 
-  def get_waypoint_json()
+  def get_json()
     j = '{"type": "Feature",'
     j += '"geometry": {"type": "Point","coordinates": '
     j += "[#{@lon},#{@lat}"
+    
     if ele != nil
       j += ",#{@ele}"
     end
+    
     j += ']},'
+    
     if name != nil or type != nil
       j += '"properties": {'
       if name != nil
@@ -106,8 +109,10 @@ class Waypoint
       j += '}'
     end
     j += "}"
+    
     return j
   end
+  
   
 end
 
@@ -128,11 +133,7 @@ class World
       if i != 0
         s +=","
       end
-        if f.class == Track
-            s += f.get_track_json
-        elsif f.class == Waypoint
-            s += f.get_waypoint_json
-      end
+      s += f.get_json
     end
     s + "]}"
   end
