@@ -2,7 +2,7 @@
 
 class Track
 
-  def initialize(segments, name=nil)
+  def initialize(segments, name: nil)
     @name = name
     segment_objects = []
     segments.each do |s|
@@ -74,7 +74,7 @@ end
 
 class Waypoint
 
-  attr_reader :lat, :lon, :ele, :name, :type
+  attr_reader :point, :name, :type
 
   def initialize(point, name=nil, type=nil)
     @point = point
@@ -142,8 +142,8 @@ end
 
 def main()
 
-  w = Waypoint.new(Point.new(-121.5, 45.5, 30), "home", "flag")
-  w2 = Waypoint.new(Point.new(-121.5, 45.6, nil), "store", "dot")
+  waypoint1 = Waypoint.new(Point.new(-121.5, 45.5, 30), "home", "flag")
+  waypoint2 = Waypoint.new(Point.new(-121.5, 45.6, nil), "store", "dot")
   ts1 = [
   Point.new(-122, 45),
   Point.new(-122, 46),
@@ -157,10 +157,10 @@ def main()
     Point.new(-122, 45.5),
   ]
 
-  t = Track.new([ts1, ts2], "track 1")
-  t2 = Track.new([ts3], "track 2")
+  track1 = Track.new([ts1, ts2], name: "track 1")
+  track2 = Track.new([ts3], name: "track 2")
 
-  world = World.new("My Data", [w, w2, t, t2])
+  world = World.new("My Data", [waypoint1, waypoint2, track1, track2])
 
   puts world.to_geojson()
   
