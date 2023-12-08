@@ -76,10 +76,8 @@ class Waypoint
 
   attr_reader :lat, :lon, :ele, :name, :type
 
-  def initialize(lon, lat, ele=nil, name=nil, type=nil)
-    @lat = lat
-    @lon = lon
-    @ele = ele
+  def initialize(point, name=nil, type=nil)
+    @point = point
     @name = name
     @type = type
   end
@@ -87,10 +85,10 @@ class Waypoint
   def get_json()
     j = '{"type": "Feature",'
     j += '"geometry": {"type": "Point","coordinates": '
-    j += "[#{@lon},#{@lat}"
+    j += "[#{@point.lon},#{@point.lat}"
     
-    if ele != nil
-      j += ",#{@ele}"
+    if @point.ele != nil
+      j += ",#{@point.ele}"
     end
     
     j += ']},'
@@ -144,8 +142,8 @@ end
 
 def main()
 
-  w = Waypoint.new(-121.5, 45.5, 30, "home", "flag")
-  w2 = Waypoint.new(-121.5, 45.6, nil, "store", "dot")
+  w = Waypoint.new(Point.new(-121.5, 45.5, 30), "home", "flag")
+  w2 = Waypoint.new(Point.new(-121.5, 45.6, nil), "store", "dot")
   ts1 = [
   Point.new(-122, 45),
   Point.new(-122, 46),
