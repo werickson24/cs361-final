@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require 'json'
 
 class Track
 
@@ -93,19 +94,27 @@ class Waypoint
     
     j += ']},'
     
-    if name != nil or type != nil
-      j += '"properties": {'
-      if name != nil
-        j += '"title": "' + @name + '"'
-      end
-      if type != nil
-        if name != nil
-          j += ','
-        end
-        j += '"icon": "' + @type + '"'
-      end
-      j += '}'
+    # if name != nil or type != nil
+      # j += '"properties": {'
+      # if name != nil
+        # j += '"title": "' + @name + '"'
+      # end
+      # if type != nil
+        # if name != nil
+          # j += ','
+        # end
+        # j += '"icon": "' + @type + '"'
+      # end
+      # j += '}'
+    # end
+    
+    if name or type
+      properties = {}
+      properties['title'] = name if name
+      properties['icon'] = type if type
+      j += '"properties": ' + properties.to_json
     end
+    
     j += "}"
     
     return j
