@@ -1,4 +1,5 @@
 ## GIS Tool
+#### Refactored by William Erickson
 
 Geographic Information Systems program.
 
