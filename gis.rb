@@ -12,9 +12,10 @@ class Track
     @segments = segment_objects
   end
 
-  def get_json()
+  def get_json_object()
     #track_json = {}
-    
+    #utterly break the code since this doesnt parse yet
+    return({"Track":"Placeholder"})
     
     j = '{'
     j += '"type": "Feature", '
@@ -50,6 +51,9 @@ class Track
       j+=']'
     end
     j + ']}}'
+    
+    # TEMPORARY HACK SINCE WE REFACTORED OUT OF ORDER OOPS
+    return(JSON.parse(j))
   end
   
 end
@@ -86,7 +90,7 @@ class Waypoint
     @type = type
   end
 
-  def get_json()
+  def get_json_object()
   #possible next step, Make get json return a ruby object of json structure, and have to_json called on it elsewhere.
   
     waypoint_json = {}
@@ -107,7 +111,7 @@ class Waypoint
       waypoint_json['properties'] = properties
     end
     
-    return waypoint_json.to_json
+    return waypoint_json#.to_json
   end                                                                             
 end
 
@@ -125,19 +129,13 @@ class World
   def to_geojson()
     world_json = {}
     world_json['type'] = "FeatureCollection"
-
     
     features_json = []
-    #s = '{"type": "FeatureCollection","features": ['
-    @features.each_with_index do |f,i|
-      features_json.append(f.get_json)
-      
+    @features.each do |f|
+      features_json.append(f.get_json_object)
     end
-    #puts("DEBUG: World to geojson features: ")
-    #puts(features_json)
-    
+  
     world_json['features'] = features_json
-    #s + "]}"
     
     return world_json.to_json
   end
