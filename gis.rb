@@ -5,12 +5,16 @@ class Track
 
   def initialize(segments, name: nil)
     @name = name
-    segment_objects = []
-    #move this to a function later
-    segments.each do |s|
-      segment_objects.append(TrackSegment.new(s))
-    end
+    segment_objects = segments_to_array(segments)
     @segments = segment_objects
+  end
+  
+  def segments_to_array(segments)
+    seg_array = []
+    segments.each do |s|
+      seg_array.append(TrackSegment.new(s))
+    end
+    return seg_array
   end
 
   def get_json_object()
@@ -26,14 +30,7 @@ class Track
     #parse all segments and their points together into coordinate
     coordinates = []
     @segments.each do |s|
-      segment = []
-      s.coordinates.each do |c|
-        point = [c.lon, c.lat]
-        point.append(c.ele) if c.ele
-        
-        segment.append(point)
-      end
-      coordinates.append(segment)
+      coordinates.append(s.get_json_object)
     end
     
     geometry = {}
@@ -53,6 +50,17 @@ class TrackSegment
   
   def initialize(coordinates)
     @coordinates = coordinates
+  end
+  
+  def get_json_object()
+    segment = []
+    coordinates.each do |c|
+      point = [c.lon, c.lat]
+      point.append(c.ele) if c.ele
+      
+      segment.append(point)
+    end
+    return segment
   end
   
 end
@@ -133,6 +141,7 @@ def main()
 
   waypoint1 = Waypoint.new(Point.new(-121.5, 45.5, 30), "home", "flag")
   waypoint2 = Waypoint.new(Point.new(-121.5, 45.6, nil), "store", "dot")
+  
   ts1 = [
   Point.new(-122, 45),
   Point.new(-122, 46),
