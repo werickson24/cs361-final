@@ -17,6 +17,8 @@ class Track
     return seg_array
   end
   
+  # from my prior GIS experience, keeping track segments is important to how GIS software works, 
+  # so isolating the class, and keeping the workflow the same without dependency injection seems like the best solution
   def track_segment(coordinates)
     TrackSegment.new(coordinates)
   end
