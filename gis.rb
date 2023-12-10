@@ -3,16 +3,16 @@ require 'json'
 
 class Track
 
-  def initialize(segments, name: nil)
+  def initialize(segments: , name: nil)
     @name = name
-    segment_objects = segments_to_array(segments)
+    segment_objects = segments_to_tracksegments(segments)
     @segments = segment_objects
   end
   
-  def segments_to_array(segments)
+  def segments_to_tracksegments(segments)
     seg_array = []
     segments.each do |s|
-      seg_array.append(TrackSegment.new(s))
+      seg_array.append(TrackSegment.new(s)) # there must be a better way
     end
     return seg_array
   end
@@ -27,7 +27,6 @@ class Track
       track_json['properties'] = title
     end
     
-    #parse all segments and their points together into coordinate
     coordinates = []
     @segments.each do |s|
       coordinates.append(s.get_json_object)
@@ -158,8 +157,8 @@ def main()
     Point.new(-122, 45.5),
   ]
 
-  track1 = Track.new([ts1, ts2], name: "track 1")
-  track2 = Track.new([ts3], name: "track 2")
+  track1 = Track.new(segments: [ts1, ts2], name: "track 1")
+  track2 = Track.new(segments: [ts3], name: "track 2")
 
   world = World.new("My Data", [waypoint1, waypoint2, track1, track2])
 

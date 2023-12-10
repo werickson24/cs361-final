@@ -35,12 +35,12 @@ class TestGis < Test::Unit::TestCase
       Point.new(-122, 45.5),
     ]
 
-    t = Track.new([ts1, ts2], name: "track 1")
+    t = Track.new(segments: [ts1, ts2], name: "track 1")
     expected = JSON.parse('{"type": "Feature", "properties": {"title": "track 1"},"geometry": {"type": "MultiLineString","coordinates": [[[-122,45],[-122,46],[-121,46]],[[-121,45],[-121,46]]]}}')
     result = JSON.parse(t.get_json_object.to_json)
     assert_equal(expected, result)
 
-    t = Track.new([ts3], name: "track 2")
+    t = Track.new(segments: [ts3], name: "track 2")
     expected = JSON.parse('{"type": "Feature", "properties": {"title": "track 2"},"geometry": {"type": "MultiLineString","coordinates": [[[-121,45.5],[-122,45.5]]]}}')
     result = JSON.parse(t.get_json_object.to_json)
     assert_equal(expected, result)
