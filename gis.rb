@@ -55,9 +55,7 @@ class TrackSegment
   def get_json_object()
     segment = []
     coordinates.each do |c|
-      point = [c.lon, c.lat]
-      point.append(c.ele) if c.ele
-      
+      point = c.get_json_object
       segment.append(point)
     end
     return segment
@@ -73,6 +71,12 @@ class Point
     @lon = lon
     @lat = lat
     @ele = ele
+  end
+  
+  def get_json_object()
+    coordinates = [@lon, @lat]
+    coordinates.append(@ele) if @ele
+    return coordinates
   end
   
 end
@@ -91,8 +95,7 @@ class Waypoint
     waypoint_json = {}
     waypoint_json['type'] = "Feature"
     
-    coordinates = [@point.lon, @point.lat]
-    coordinates.append(@point.ele) if @point.ele
+    coordinates = @point.get_json_object
     
     geometry = {}
     geometry['type'] = "Point"
