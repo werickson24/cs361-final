@@ -87,6 +87,8 @@ class Waypoint
   end
 
   def get_json()
+  #possible next step, Make get json return a ruby object of json structure, and have to_json called on it elsewhere.
+  
     waypoint_json = {}
     waypoint_json['type'] = "Feature"
     
@@ -121,15 +123,23 @@ class World
   end
 
   def to_geojson()
-    s = '{"type": "FeatureCollection","features": ['
+    world_json = {}
+    world_json['type'] = "FeatureCollection"
+
+    
+    features_json = []
+    #s = '{"type": "FeatureCollection","features": ['
     @features.each_with_index do |f,i|
-      # add seperator for subsequent features
-      if i != 0
-        s +=","
-      end
-      s += f.get_json
+      features_json.append(f.get_json)
+      
     end
-    s + "]}"
+    #puts("DEBUG: World to geojson features: ")
+    #puts(features_json)
+    
+    world_json['features'] = features_json
+    #s + "]}"
+    
+    return world_json.to_json
   end
   
 end
