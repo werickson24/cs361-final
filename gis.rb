@@ -13,6 +13,9 @@ class Track
   end
 
   def get_json()
+    #track_json = {}
+    
+    
     j = '{'
     j += '"type": "Feature", '
     if @name != nil
@@ -84,43 +87,26 @@ class Waypoint
   end
 
   def get_json()
-    j = '{"type": "Feature",'
-    j += '"geometry": {"type": "Point","coordinates": '
-    j += "[#{@point.lon},#{@point.lat}"
+    waypoint_json = {}
+    waypoint_json['type'] = "Feature"
     
-    if @point.ele != nil
-      j += ",#{@point.ele}"
-    end
+    coordinates = [@point.lon, @point.lat]
+    coordinates.append(@point.ele) if @point.ele
     
-    j += ']},'
-    
-    # if name != nil or type != nil
-      # j += '"properties": {'
-      # if name != nil
-        # j += '"title": "' + @name + '"'
-      # end
-      # if type != nil
-        # if name != nil
-          # j += ','
-        # end
-        # j += '"icon": "' + @type + '"'
-      # end
-      # j += '}'
-    # end
+    geometry = {}
+    geometry['type'] = "Point"
+    geometry['coordinates'] = coordinates
+    waypoint_json['geometry'] = geometry
     
     if name or type
       properties = {}
       properties['title'] = name if name
       properties['icon'] = type if type
-      j += '"properties": ' + properties.to_json
+      waypoint_json['properties'] = properties
     end
     
-    j += "}"
-    
-    return j
-  end
-  
-  
+    return waypoint_json.to_json
+  end                                                                             
 end
 
 class World
@@ -141,7 +127,6 @@ class World
       if i != 0
         s +=","
       end
-      
       s += f.get_json
     end
     s + "]}"
