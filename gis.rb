@@ -6,6 +6,7 @@ class Track
   def initialize(segments, name: nil)
     @name = name
     segment_objects = []
+    #move this to a function later
     segments.each do |s|
       segment_objects.append(TrackSegment.new(s))
     end
@@ -13,47 +14,35 @@ class Track
   end
 
   def get_json_object()
-    #track_json = {}
-    #utterly break the code since this doesnt parse yet
-    return({"Track":"Placeholder"})
+    track_json = {}
+    track_json['type'] = "Feature"
     
-    j = '{'
-    j += '"type": "Feature", '
-    if @name != nil
-      j+= '"properties": {'
-      j += '"title": "' + @name + '"'
-      j += '},'
+    if @name
+      title = {}
+      title['title'] = @name
+      track_json['properties'] = title
     end
-    j += '"geometry": {'
-    j += '"type": "MultiLineString",'
-    j +='"coordinates": ['
-    # Loop through all the segment objects
-    @segments.each_with_index do |s, index|
-      if index > 0
-        j += ","
-      end
-      j += '['
-      # Loop through all the coordinates in the segment
-      tsj = ''
+    
+    #parse all segments and their points together into coordinate
+    coordinates = []
+    @segments.each do |s|
+      segment = []
       s.coordinates.each do |c|
-        if tsj != ''
-          tsj += ','
-        end
-        # Add the coordinate
-        tsj += '['
-        tsj += "#{c.lon},#{c.lat}"
-        if c.ele != nil
-          tsj += ",#{c.ele}"
-        end
-        tsj += ']'
+        point = [c.lon, c.lat]
+        point.append(c.ele) if c.ele
+        
+        segment.append(point)
       end
-      j+=tsj
-      j+=']'
+      coordinates.append(segment)
     end
-    j + ']}}'
     
-    # TEMPORARY HACK SINCE WE REFACTORED OUT OF ORDER OOPS
-    return(JSON.parse(j))
+    geometry = {}
+    geometry['type'] = "MultiLineString"
+    geometry['coordinates'] = coordinates
+    
+    track_json['geometry'] = geometry
+
+    return track_json
   end
   
 end
@@ -91,8 +80,6 @@ class Waypoint
   end
 
   def get_json_object()
-  #possible next step, Make get json return a ruby object of json structure, and have to_json called on it elsewhere.
-  
     waypoint_json = {}
     waypoint_json['type'] = "Feature"
     
@@ -111,7 +98,7 @@ class Waypoint
       waypoint_json['properties'] = properties
     end
     
-    return waypoint_json#.to_json
+    return waypoint_json
   end                                                                             
 end
 
