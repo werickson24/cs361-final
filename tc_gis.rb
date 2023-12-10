@@ -62,8 +62,8 @@ class TestGis < Test::Unit::TestCase
       Point.new(-122, 45.5),
     ]
 
-    t = Track.new([ts1, ts2], name: "track 1")
-    t2 = Track.new([ts3], name: "track 2")
+    t = Track.new(segments: [ts1, ts2], name: "track 1")
+    t2 = Track.new(segments: [ts3], name: "track 2")
 
     w = World.new("My Data", [w, w2, t, t2])
 

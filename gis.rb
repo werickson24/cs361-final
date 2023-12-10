@@ -12,9 +12,13 @@ class Track
   def segments_to_tracksegments(segments)
     seg_array = []
     segments.each do |s|
-      seg_array.append(TrackSegment.new(s)) # there must be a better way
+      seg_array.append(track_segment(s))
     end
     return seg_array
+  end
+  
+  def track_segment(coordinates)
+    TrackSegment.new(coordinates)
   end
 
   def get_json_object()
