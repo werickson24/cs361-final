@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 require 'json'
 
+# Track manages an array of TrackSegments and the name of that track
 class Track
 
   def initialize(segments: , name: nil)
     @name = name
-    segment_objects = segments_to_tracksegments(segments)
-    @segments = segment_objects
+    @segments = segments_to_tracksegments(segments)
   end
   
   def segments_to_tracksegments(segments)
@@ -49,6 +49,7 @@ class Track
   
 end
 
+# Track Segment handles a set of points
 class TrackSegment
 
   attr_reader :coordinates
@@ -68,6 +69,7 @@ class TrackSegment
   
 end
 
+# Point handles 3d and 2d coordinates in form decimal degrees
 class Point
 
   attr_reader :lat, :lon, :ele
@@ -86,6 +88,7 @@ class Point
   
 end
 
+# Waypoint handles a point and related information
 class Waypoint
 
   attr_reader :point, :name, :type
@@ -118,6 +121,7 @@ class Waypoint
   end                                                                             
 end
 
+# World handles multiple types of features under a single name
 class World
 
   def initialize(name, features)
@@ -150,21 +154,21 @@ def main()
   waypoint1 = Waypoint.new(Point.new(-121.5, 45.5, 30), "home", "flag")
   waypoint2 = Waypoint.new(Point.new(-121.5, 45.6, nil), "store", "dot")
   
-  ts1 = [
+  trackseg1 = [
   Point.new(-122, 45),
   Point.new(-122, 46),
   Point.new(-121, 46),
   ]
 
-  ts2 = [ Point.new(-121, 45), Point.new(-121, 46), ]
+  trackseg2 = [ Point.new(-121, 45), Point.new(-121, 46), ]
 
-  ts3 = [
+  trackseg3 = [
     Point.new(-121, 45.5),
     Point.new(-122, 45.5),
   ]
 
-  track1 = Track.new(segments: [ts1, ts2], name: "track 1")
-  track2 = Track.new(segments: [ts3], name: "track 2")
+  track1 = Track.new(segments: [trackseg1, trackseg2], name: "track 1")
+  track2 = Track.new(segments: [trackseg3], name: "track 2")
 
   world = World.new("My Data", [waypoint1, waypoint2, track1, track2])
 
