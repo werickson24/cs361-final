@@ -128,10 +128,6 @@ class World
     @name = name
     @features = features
   end
-  
-  def add_feature(f)
-    @features.append(f)
-  end
 
   def to_geojson()
     world_json = {}
